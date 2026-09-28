@@ -1,0 +1,82 @@
+services:
+  db:
+    image: postgres:16.4-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-navigator}
+      POSTGRES_USER: ${POSTGRES_USER:-navigator_migrator}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_migrator_only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "5432:5432"
+    volumes:
+      - navigator-db:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+
+  migrate:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment: &api-env
+      APP_DATABASE_URL: ${APP_DATABASE_URL:-postgresql+psycopg://navigator_app:local_app_only@db:5432/navigator}
+      MIGRATION_DATABASE_URL: ${MIGRATION_DATABASE_URL:-postgresql+psycopg://navigator_migrator:local_migrator_only@db:5432/navigator}
+      AUTH_MODE: ${AUTH_MODE:-synthetic}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["alembic", "upgrade", "head"]
+
+  seed:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment: *api-env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["python", "-m", "app.seed"]
+
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment: *api-env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment: *api-env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["python", "-m", "app.worker", "--poll"]
+
+  web:
+    build: ./apps/web
+    environment:
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+
+  web-check:
+    build:
+      context: ./apps/web
+      target: build
+    command: ["npm", "run", "typecheck"]
+    profiles: ["checks"]
+
+volumes:
+  navigator-db:

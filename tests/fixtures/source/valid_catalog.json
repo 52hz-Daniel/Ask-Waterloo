@@ -1,0 +1,15 @@
+{
+  "bundle_version": "synthetic-import-template",
+  "effective_from": "2026-09-01",
+  "records": [
+    {
+      "source_record_id": "fixture-course-101",
+      "source_url": "synthetic://catalog/fixture-course-101",
+      "code": "SYN 101",
+      "title": "Validated Synthetic Course",
+      "units": "0.50",
+      "valid_from": "2026-09-01",
+      "valid_to": null
+    }
+  ]
+}

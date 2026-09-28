@@ -1,0 +1,22 @@
+{
+  "bundle_version": "synthetic-duplicate-template",
+  "effective_from": "2026-09-01",
+  "records": [
+    {
+      "source_record_id": "fixture-duplicate-301",
+      "source_url": "synthetic://catalog/fixture-duplicate-301",
+      "code": "SYN 301A",
+      "title": "First Duplicate",
+      "units": "0.50",
+      "valid_from": "2026-09-01"
+    },
+    {
+      "source_record_id": "fixture-duplicate-301",
+      "source_url": "synthetic://catalog/fixture-duplicate-301-copy",
+      "code": "SYN 301B",
+      "title": "Second Duplicate",
+      "units": "0.50",
+      "valid_from": "2026-09-01"
+    }
+  ]
+}

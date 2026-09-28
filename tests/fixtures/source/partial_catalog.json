@@ -1,0 +1,12 @@
+{
+  "bundle_version": "synthetic-partial-template",
+  "effective_from": "2026-09-01",
+  "records": [
+    {
+      "source_record_id": "fixture-partial-201",
+      "code": "SYN 201",
+      "units": "0.50",
+      "valid_from": "2026-09-01"
+    }
+  ]
+}

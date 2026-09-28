@@ -1,0 +1,21 @@
+name: verify
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create local synthetic configuration
+        run: cp .env.example .env
+      - name: Verify the reproducible slice
+        run: make verify
+      - name: Tear down
+        if: always()
+        run: docker compose down --volumes --remove-orphans
+

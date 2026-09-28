@@ -1,0 +1,7 @@
+{
+  "bundle_version": "synthetic-malformed-template",
+  "effective_from": "not-a-date",
+  "records": [
+    "this-is-not-a-course-record"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://academic-navigator.local/contracts/assessment-result.schema.json",
+  "type": "object",
+  "required": ["evaluation_id", "assessment", "registration", "engine_version", "findings", "limitations"],
+  "properties": {
+    "evaluation_id": {"type": "string", "format": "uuid"},
+    "assessment": {"enum": ["SATISFIED", "NOT_SATISFIED", "UNKNOWN"]},
+    "registration": {"const": "NOT_EVALUATED"},
+    "engine_version": {"type": "string"},
+    "findings": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

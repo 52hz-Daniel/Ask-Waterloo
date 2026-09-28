@@ -1,0 +1,38 @@
+[project]
+name = "academic-navigator-api"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "alembic==1.14.1",
+  "fastapi==0.115.8",
+  "httpx==0.28.1",
+  "psycopg[binary]==3.2.5",
+  "pydantic-settings==2.7.1",
+  "sqlalchemy==2.0.38",
+  "uvicorn[standard]==0.34.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "jsonschema==4.23.0",
+  "mypy==1.15.0",
+  "pytest==8.3.4",
+  "pytest-cov==6.0.0",
+  "ruff==0.9.6"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
